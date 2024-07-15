@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
+
+#define MAX_PASSWORD_LENGTH 100
+
+bool has_upper(const char* str) {
+    while (*str) {
+        if (isupper(*str)) return true;
+        str++;
+    }
+    return false;
+}
+
+bool has_lower(const char* str) {
+    while (*str) {
+        if (islower(*str)) return true;
+        str++;
+    }
+    return false;
+}
+
+bool has_digit(const char* str) {
+    while (*str) {
+        if (isdigit(*str)) return true;
+        str++;
+    }
+    return false;
+}
+
+bool has_special(const char* str) {
+    const char* special_chars = ",~!@#$%^&*()-_=+[]{}|;:<>/?";
+    while (*str) {
+        if (strchr(special_chars, *str)) return true;
+        str++;
+    }
+    return false;
+}
+
+int main() {
+    char password[MAX_PASSWORD_LENGTH];
+    fgets(password, sizeof(password), stdin);
+    
+    // Remove newline character if present
+    size_t len = strlen(password);
+    if (len > 0 && password[len-1] == '\n') {
+        password[len-1] = '\0';
+        len--;
+    }
+
+    bool valid = true;
+
+    if (len > 15 || len < 8) {
+        valid = false;
+    }
+
+    if (!has_upper(password)) {
+        valid = false;
+    }
+
+    if (!has_lower(password)) {
+        valid = false;
+    }
+
+    if (!has_digit(password)) {
+        valid = false;
+    }
+
+    if (!has_special(password)) {
+        valid = false;
+    }
+
+    if (valid) {
+        printf("%s is a valid password\n", password);
+    } else {
+        printf("%s is an invalid password\n", password);
+    }
+
+    return 0;
+}
