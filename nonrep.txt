@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+int firstNonRepeating(int arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        int j;
+        for (j = 0; j < n; j++)
+            if (i != j && arr[i] == arr[j])
+                break;
+        if (j == n)
+            return arr[i];
+    }
+    return -1;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int arr[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    int result = firstNonRepeating(arr, n);
+    if (result != -1) {
+        printf("%d", result);
+    } else {
+        printf("No non-repeating element found.");
+    }
+
+    return 0;
+}
