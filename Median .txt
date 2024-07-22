@@ -1,0 +1,88 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_SIZE 100000
+
+void swap(int *a, int *b)
+ {
+	 int t = *a; *a = *b; *b = t;
+ }
+void heapify(int *h, int n, int i, int (*cmp)(int, int))
+ {
+    int ext = i, l = 2*i + 1, r = 2*i + 2;
+    if (l < n && cmp(h[l], h[ext])) 
+		ext = l;
+    if (r < n && cmp(h[r], h[ext])) 
+		ext = r;
+    if (ext != i)
+    {
+	 swap(&h[i], &h[ext]); 
+         heapify(h, n, ext, cmp);
+    } 
+ }
+
+void insert(int *h, int *n, int x, int (*cmp)(int, int))
+ {
+    int i = (*n)++;
+    h[i] = x;
+    while (i && cmp(h[i], h[(i-1)/2]))
+      { 	swap(&h[i], &h[(i-1)/2]);
+		 i = (i-1)/2; 
+      }
+}
+
+void pop(int *h, int *n) 
+{
+    h[0] = h[--(*n)];
+    heapify(h, *n, 0, h == max_h ? (int(*)(int,int))((int)(((int)a-(int)b)>0)-1) : (int(*)(int,int))((int)(((int)b-(int)a)>0)-1));
+}
+
+int max_cmp(int a, int b)
+ {
+	 return a > b;
+ }
+int min_cmp(int a, int b)
+ {	
+	 return a < b;
+ }
+
+int max_h[MAX_SIZE], min_h[MAX_SIZE], max_n, min_n;
+
+void insert_median(int x) 
+{
+    if (max_n == 0 || x <= max_h[0])
+		 insert(max_h, &max_n, x, max_cmp);
+    else 
+		insert(min_h, &min_n, x, min_cmp);
+    
+    if (max_n > min_n + 1) 
+     {
+		 insert(min_h, &min_n, max_h[0], min_cmp); 
+		pop(max_h, &max_n);
+     }
+    else if (min_n > max_n) 
+    { 
+		insert(max_h, &max_n, min_h[0], max_cmp); 
+		pop(min_h, &min_n); 
+     }
+ }
+float get_median()
+ {
+    if (max_n > min_n)
+		 return max_h[0];
+    if (min_n > max_n) 
+		return min_h[0];
+    return (max_h[0] + min_h[0]) / 2.0f;
+}
+
+int main()
+ {
+    int n, x;
+    scanf("%d", &n);
+    while (n--) 
+    {
+        scanf("%d", &x);
+        insert_median(x);
+        printf("%g\n", get_median());
+    }
+    return 0;
+}
