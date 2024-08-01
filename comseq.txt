@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() 
+{
+    char s1[10];
+    char s2[10];
+    scanf("%s", s1);
+    scanf("%s", s2);
+    int n1, n2;
+    n1 = strlen(s1);
+    n2 = strlen(s2);
+    int arr[n1 + 1][n2 + 1];
+    for (int i = 0; i <= n1; i++)
+   {
+        for (int j = 0; j <= n2; j++) 
+       {
+            arr[i][j] = 0;
+        }
+    }
+
+    for (int i = 1; i <= n1; i++) 
+    {
+        for (int j = 1; j <= n2; j++)
+        {
+            if (s1[i - 1] == s2[j - 1]) 
+           {
+                arr[i][j] = 1 + arr[i][j - 1] + arr[i - 1][j];
+            } 
+            else
+            {
+                arr[i][j] = arr[i][j - 1] + arr[i - 1][j] - arr[i - 1][j - 1];
+            }
+        }
+    }
+
+    printf("%d", arr[n1][n2]);
+
+    return 0;
+}
